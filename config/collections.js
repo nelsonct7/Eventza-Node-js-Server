@@ -1,0 +1,10 @@
+module.exports={
+    USER_COLLECTION:'ev_users',
+    ADMIN_COLLECTION:'ev_admin',
+    CATEGORY_COLLECTION:'ev_category',
+    PRODUCT_COLLECTION:'ev_product',
+    EVENT_COLLECTION:'ev_events',
+    COMPANY_COLLECTION:'ev_company',
+    ADDRESS_COLLECTION:'ev_user_address',
+    ORDER_COLLECTION:'ev_orders'
+}
