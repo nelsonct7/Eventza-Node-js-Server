@@ -56,7 +56,6 @@ const authUser = asynchandler(async (req, res) => {
     const user = await UserModel.findOne({
         userEmail
     });
-    console.log(user);
     if (user && user.blocked != true && (await user.matchPassword(userPassword))) {
         tockenUser=generateTocken(user._id)
         res.cookie('userTocken',tockenUser,{ maxAge: 9000000, httpOnly: false})

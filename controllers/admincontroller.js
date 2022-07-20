@@ -1,5 +1,7 @@
 const generateTocken = require('../utils/generateTocken');
 const asynchandler = require('express-async-handler');
+const CompanyModel=require('../models/companyModel')
+const UserModel=require('../models/userModel')
 
 
 const adminLogin= async (req,res)=>{
@@ -17,7 +19,94 @@ const adminLogin= async (req,res)=>{
     }
 
 }
+const adminUserList=async(req,res)=>{
+    const usersList=await UserModel.find({userRoll:"user"})
+    if(usersList){
+        res.status(200).json(usersList)
+    }else{
+        res.status(400).json({message:'Manager List error'})
+        
+    }
+}
+
+const adminVendorList=async(req,res)=>{
+    const companyList=await CompanyModel.find()
+    if(companyList){
+        res.status(200).json(companyList)
+    }else{
+        res.status(400).json({message:'Company List error'})
+        
+    }
+}
+
+const adminManagerList=async(req,res)=>{
+    const managerList=await UserModel.find({userRoll:"manager"})
+    if(managerList){
+        res.status(200).json(managerList)
+    }else{
+        res.status(400).json({message:'User List error'})
+        
+    }
+}
+
+const adminDeleteUser = async (req,res)=>{
+    const userId=req.params.id;
+    await UserModel.findByIdAndDelete(userId).then((data)=>{
+        res.status(204).json({data})
+    }).catch((err)=>{
+        res.status(400).json({message:'Failed to delete'})
+    })
+}
+
+const adminChangeUserStatus=async (req,res)=>{
+    const userId=req.params.id
+    let status=req.params.status
+    
+    if(status==='true'){
+        status=false
+    }else{
+        status=true
+    }
+    await UserModel.findByIdAndUpdate(userId,{blocked:status}).then((data)=>{
+        res.status(200).json({data})
+    }).catch((err)=>{
+        res.status(400).json({message:'Updation Failed'})
+    })
+}
+
+const adminDeleteVendor=async (req,res)=>{
+    const companyId=req.params.id;
+    await CompanyModel.findByIdAndDelete(companyId).then((data)=>{
+        res.status(204).json({data})
+    }).catch((err)=>{
+        res.status(400).json({message:'Failed to delete'})
+    })
+}
+
+const adminChangeVendorStatus=async(req,res)=>{
+    const companyId=req.params.id
+    let status=req.params.status
+    
+    if(status==='true'){
+        status=false
+    }else{
+        status=true
+    }
+    await CompanyModel.findByIdAndUpdate(companyId,{blocked:status}).then((data)=>{
+        res.status(200).json({data})
+    }).catch((err)=>{
+        res.status(400).json({message:'Updation Failed'})
+    })
+}
 
 module.exports={
-    adminLogin
+    adminLogin,
+    adminUserList,
+    adminVendorList,
+    adminManagerList,
+    adminDeleteUser,
+    adminChangeUserStatus,
+    adminDeleteVendor,
+    adminChangeVendorStatus
+
 };
