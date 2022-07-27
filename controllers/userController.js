@@ -1,6 +1,7 @@
 const asynchandler = require('express-async-handler');
 const UserModel = require('../models/userModel');
 const generateTocken = require('../utils/generateTocken');
+const jwt=require('jsonwebtoken')
 
 const registerUser = asynchandler(async (req, res) => {
     const {
@@ -73,8 +74,32 @@ const authUser = asynchandler(async (req, res) => {
 
 })
 
+const tockenValidator=async(req,res)=>{
+    const jwtTocken=req.body.userTocken
+  
+    const verified=jwt.verify(jwtTocken,process.env.JWT_KEY)
+    const userId=verified.id
+    if(verified){
+        const user = await UserModel.findOne({
+            _id:userId
+        });
+        res.status(201).json({
+                userName: user.userName,
+                userEmail: user.userEmail,
+                _id: user._id,
+                tocken: jwtTocken,
+                userRoll:user.userRoll
+        })
+    }else{
+        res.status(400).json({
+            message:'Validation Failed'
+        })
+    }
+}
+
 
 module.exports = {
     registerUser,
-    authUser
+    authUser,
+    tockenValidator
 };

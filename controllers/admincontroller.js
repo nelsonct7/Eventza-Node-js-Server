@@ -2,6 +2,7 @@ const generateTocken = require('../utils/generateTocken');
 const asynchandler = require('express-async-handler');
 const CompanyModel=require('../models/companyModel')
 const UserModel=require('../models/userModel')
+const jwt=require('jsonwebtoken')
 
 
 const adminLogin= async (req,res)=>{
@@ -84,9 +85,9 @@ const adminDeleteVendor=async (req,res)=>{
 }
 
 const adminChangeVendorStatus=async(req,res)=>{
-    const companyId=req.params.id
-    let status=req.params.status
-    
+    const companyId=req.params.id 
+    let status=req.params.status 
+     
     if(status==='true'){
         status=false
     }else{
@@ -99,6 +100,23 @@ const adminChangeVendorStatus=async(req,res)=>{
     })
 }
 
+const adminTockenValidator=async(req,res)=>{
+    const jwtAdminTocken=req.body.adminTocken
+    console.log(jwtAdminTocken);
+    const verified=jwt.verify(jwtAdminTocken,process.env.JWT_KEY)
+    if(verified){
+        res.status(201).json({
+            admin:"admin" 
+        })
+    }else{
+        res.status(400).json({
+            message:'Validation Failed' 
+        })
+    }
+    
+    
+}
+
 module.exports={
     adminLogin,
     adminUserList,
@@ -107,6 +125,6 @@ module.exports={
     adminDeleteUser,
     adminChangeUserStatus,
     adminDeleteVendor,
-    adminChangeVendorStatus
-
+    adminChangeVendorStatus,
+    adminTockenValidator
 };

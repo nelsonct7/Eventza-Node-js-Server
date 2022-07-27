@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const asynchandler =require('express-async-handler');
-const {registerUser,authUser} = require('../controllers/userController')
+const jwt=require('jsonwebtoken')
+const {registerUser,authUser,tockenValidator} = require('../controllers/userController')
 
 
 const verifyUser=asynchandler((req,res,next)=>{
@@ -24,5 +25,6 @@ router.get('/', function(req, res, next) {
 
 router.route('/signup').post(registerUser)
 router.route('/login').post(authUser)
+router.route('/tockenValidator').post(tockenValidator)
 
 module.exports = router;

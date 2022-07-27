@@ -21,6 +21,11 @@ const companySchema=mongoose.Schema(
             required:true,
             default:true
         },
+        userRoll:{
+            type:String,
+            required:true,
+            default:"company"
+        },
         profilepic:[
             {
                 url:String,
